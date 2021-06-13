@@ -10,7 +10,7 @@ module.exports = function (passport) {
     new JwtStrategy(opts, function (jwt_payload, done) {
       Model.User.findOne({
         where: {
-          usersId: jwt_payload.usersId,
+          id: jwt_payload.id,
         },
       }).then((users) => {
         if (!users) {

@@ -7,7 +7,6 @@ const passport = require("passport")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const flash = require("connect-flash")
-const jwt = require("jsonwebtoken")
 
 const port = process.env.PORT || 3333
 const { sequelize } = require("./src/config/database")
