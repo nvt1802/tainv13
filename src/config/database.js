@@ -1,4 +1,5 @@
-const { Sequelize, Model, DataTypes } = require("sequelize")
+const { Sequelize, DataTypes } = require("sequelize")
+
 module.exports = {
   sequelize: new Sequelize({
     database: process.env.DATABASE,
@@ -13,6 +14,7 @@ module.exports = {
         rejectUnauthorized: false,
       },
     },
+    logging: false,
   }),
   dataTypes: DataTypes,
 }

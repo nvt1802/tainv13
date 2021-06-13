@@ -21,8 +21,5 @@ module.exports = (sequelize, DataTypes) => {
       field: "password",
     },
   })
-  ;(async () => {
-    await sequelize.sync()
-  })()
   return Users
 }

@@ -96,7 +96,10 @@ module.exports = (app, cors, passport) => {
             if (result === true) {
               var token = jwt.sign(
                 users[0].dataValues,
-                process.env.ACCESS_TOKEN_SECRET || "tainv13"
+                process.env.ACCESS_TOKEN_SECRET || "tainv13",
+                {
+                  expiresIn: "3h",
+                }
               )
               res.json({ success: true, token: "JWT " + token })
             } else {

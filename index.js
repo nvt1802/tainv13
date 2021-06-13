@@ -8,10 +8,15 @@ const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const flash = require("connect-flash")
 const jwt = require("jsonwebtoken")
-// var path = require("path")
+
 const port = process.env.PORT || 3333
-// app.use(express.static(path.join(__dirname, "public")))
+const { sequelize } = require("./src/config/database")
 require("./src/config/passport")(passport)
+require("./src/model")
+;(async () => {
+  await sequelize.sync()
+})()
+
 app.use(
   session({
     secret: "tainv13",
