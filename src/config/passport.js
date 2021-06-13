@@ -1,23 +1,22 @@
 const JwtStrategy = require("passport-jwt").Strategy
 const ExtractJwt = require("passport-jwt").ExtractJwt
-const { sequelize, dataTypes } = require("../config/database")
+const Model = require("../model")
 
 module.exports = function (passport) {
-  const User = require("../model/User")(sequelize, dataTypes)
   var opts = {}
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
   opts.secretOrKey = process.env.ACCESS_TOKEN_SECRET || "tainv13"
   passport.use(
     new JwtStrategy(opts, function (jwt_payload, done) {
-      User.findAll({
+      Model.User.findOne({
         where: {
           usersId: jwt_payload.usersId,
         },
       }).then((users) => {
-        if (users.length === 0) {
-          done(null, false)
+        if (!users) {
+          done(null, false, { test_messsage: "error" })
         } else {
-          done(null, users[0].dataValues)
+          done(null, users.dataValues)
         }
       })
     })

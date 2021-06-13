@@ -2,16 +2,20 @@ module.exports = (app, cors, passport) => {
   const bcrypt = require("bcrypt-nodejs")
   const uuid = require("uuid")
   const jwt = require("jsonwebtoken")
-  const { sequelize, dataTypes } = require("../config/database")
-  const User = require("../model/User")(sequelize, dataTypes)
+  const Model = require("../model")
 
   app.get("/", async (req, res) => {
-    res.send("HELLO")
+    Model.Profile.findAll({ include: Model.Person }).then((result) => {
+      res.json(result)
+    })
   })
 
   app.get(
     "/test",
-    passport.authenticate("jwt", { session: false }),
+    passport.authenticate("jwt", {
+      session: false,
+      failureRedirect: "/",
+    }),
     async (req, res) => {
       res.send(req.user)
     }
@@ -42,16 +46,12 @@ module.exports = (app, cors, passport) => {
     if (!req.body.username || !req.body.password) {
       res.json({ success: false, msg: "Please pass username and password." })
     } else {
-      var newUser = new User({
-        username: req.body.username,
-        password: req.body.password,
-      })
-      User.findAll({
+      Model.User.findOne({
         where: {
           username: req.body.username,
         },
       }).then((users) => {
-        if (users.length !== 0) {
+        if (users) {
           res.json({ success: false, msg: "Username already exists." })
         } else {
           // Nếu chưa user nào sử dụng username này
@@ -78,12 +78,12 @@ module.exports = (app, cors, passport) => {
 
   // Xử lý thông tin khi có người thực hiện đăng nhập
   app.post("/login", function (req, res) {
-    User.findAll({
+    Model.User.findOne({
       where: {
         username: req.body.username,
       },
     }).then((users) => {
-      if (users.length === 0) {
+      if (!users) {
         res.status(401).send({
           success: false,
           msg: "Authentication failed. User not found.",
@@ -91,11 +91,11 @@ module.exports = (app, cors, passport) => {
       } else {
         bcrypt.compare(
           req.body.password,
-          users[0].dataValues.password,
+          users.dataValues.password,
           (err, result) => {
             if (result === true) {
               var token = jwt.sign(
-                users[0].dataValues,
+                users.dataValues,
                 process.env.ACCESS_TOKEN_SECRET || "tainv13",
                 {
                   expiresIn: "3h",
