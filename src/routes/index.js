@@ -1,4 +1,4 @@
-module.exports = (app, cors, passport) => {
+module.exports = (app, passport) => {
   const bcrypt = require("bcrypt-nodejs")
   const uuid = require("uuid")
   const jwt = require("jsonwebtoken")
@@ -10,9 +10,13 @@ module.exports = (app, cors, passport) => {
     })
   })
 
-  app.get("/test", passport.authenticate("jwt"), async (req, res) => {
-    res.send(req.user)
-  })
+  app.get(
+    "/test",
+    passport.authenticate("jwt", { session: false }),
+    async (req, res) => {
+      res.send(req.user)
+    }
+  )
 
   const getToken = function (headers) {
     if (headers && headers.authorization) {
@@ -26,14 +30,6 @@ module.exports = (app, cors, passport) => {
       return null
     }
   }
-
-  app.get("/login", async (req, res) => {
-    res.json({ message: req.flash("loginMessage") })
-  })
-
-  app.get("/signup", async (req, res) => {
-    res.json({ message: req.flash("signupMessage") })
-  })
 
   app.post("/signup", (req, res) => {
     if (!req.body.username || !req.body.password) {

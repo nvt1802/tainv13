@@ -16,7 +16,7 @@ require("./src/model")
 ;(async () => {
   await sequelize.sync()
 })()
-
+app.use(cors())
 app.use(
   session({
     secret: "tainv13",
@@ -33,6 +33,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
 
-require("./src/routes")(app, cors, passport)
+require("./src/routes")(app, passport)
 
 server.listen(port, console.log(`server runing in port ${port}`))
