@@ -14,7 +14,7 @@ module.exports = function (passport) {
         },
       }).then((users) => {
         if (!users) {
-          done(null, false, { test_messsage: "error" })
+          done(null, false)
         } else {
           done(null, users.dataValues)
         }
