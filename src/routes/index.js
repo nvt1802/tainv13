@@ -7,8 +7,8 @@ module.exports = (app, passport) => {
   app.use(personRouter)
 
   app.get("/", async (req, res) => {
-    Model.Profile.findAll({ include: Model.Person }).then((result) => {
-      res.json(result)
+    Model.Person.findAll().then((person) => {
+      res.json(person)
     })
   })
 
