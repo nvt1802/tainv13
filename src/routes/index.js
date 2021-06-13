@@ -10,16 +10,9 @@ module.exports = (app, cors, passport) => {
     })
   })
 
-  app.get(
-    "/test",
-    passport.authenticate("jwt", {
-      session: false,
-      failureRedirect: "/",
-    }),
-    async (req, res) => {
-      res.send(req.user)
-    }
-  )
+  app.get("/test", passport.authenticate("jwt"), async (req, res) => {
+    res.send(req.user)
+  })
 
   const getToken = function (headers) {
     if (headers && headers.authorization) {
