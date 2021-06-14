@@ -5,7 +5,7 @@ const uuid = require("uuid")
 const jwt = require("jsonwebtoken")
 const Model = require("../../model")
 
-module.exports = (passport) => {
+module.exports = () => {
   authRouter.post(
     "/signup",
     body("email")
@@ -76,7 +76,7 @@ module.exports = (passport) => {
         },
       }).then((users) => {
         if (!users) {
-          res.status(401).send({
+          res.status(401).json({
             success: false,
             msg: "Authentication failed. Email not found.",
           })

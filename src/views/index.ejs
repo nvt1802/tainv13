@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wellcome to website Tai1802</title>
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"
+    />
+    <link rel="icon" href="/favicon.ico" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/css/bootstrap/bootstrap.min.js"></script>
+  </head>
+
+  <body
+    style="
+      background-image: url('./bg.jpg');
+      background-repeat: no-repeat;
+      background-position: unset;
+      background-size: cover;
+    "
+  >
+    <div class="container-fluid">
+      <div class="d-flex justify-content-space">
+        <div style="width: 70vh">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="javascripts:void()" id="login"
+                >Login</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="javascripts:void()" id="register"
+                >Register</a
+              >
+            </li>
+          </ul>
+          <!-- login -->
+          <div
+            id="card-login"
+            class="card"
+            style="width: 70vh; margin-top: 0.5em"
+          >
+            <div class="card-body">
+              <h5 class="card-title">Login</h5>
+              <form id="form-login" method="POST">
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email-login"
+                    aria-describedby="emailHelp"
+                    placeholder="email ..."
+                  />
+                  <div class="invalid-feedback" id="email-login-msg"></div>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password-login"
+                    placeholder="password ..."
+                  />
+                  <div class="invalid-feedback" id="password-login-msg"></div>
+                </div>
+                <button
+                  type="submit"
+                  style="width: 100%"
+                  class="btn btn-primary"
+                >
+                  LOGIN
+                </button>
+                <div class="invalid-feedback" id="result-login-msg"></div>
+              </form>
+              <div class="form-group">
+                <label for="token">Token</label>
+                <textarea
+                  id="token"
+                  style="margin-top: 1em; width: 100%"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- register -->
+          <div
+            id="card-register"
+            class="card d-none"
+            style="width: 70vh; margin-top: 0.5em"
+          >
+            <div class="card-body">
+              <h5 class="card-title">Register</h5>
+              <form id="form-register" method="POST">
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email-register"
+                    aria-describedby="emailHelp"
+                    placeholder="email ..."
+                  />
+                  <div class="invalid-feedback" id="email-register-msg"></div>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password-register"
+                    placeholder="password ..."
+                  />
+                  <div
+                    class="invalid-feedback"
+                    id="password-register-msg"
+                  ></div>
+                </div>
+                <button
+                  type="submit"
+                  style="width: 100%"
+                  class="btn btn-primary"
+                >
+                  REGISTER
+                </button>
+                <div class="invalid-feedback" id="result-register-msg"></div>
+                <div class="valid-feedback" id="success-register-msg"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    $(document).ready(function () {
+      $("#login").click((event) => {
+        event.preventDefault()
+        $("#login").addClass("active")
+        $("#register").removeClass("active")
+
+        $("#card-login").addClass("d-block")
+        $("#card-login").removeClass("d-none")
+
+        $("#card-register").addClass("d-none")
+        $("#card-register").removeClass("d-block")
+      })
+      $("#register").click((event) => {
+        event.preventDefault()
+        $("#register").addClass("active")
+        $("#login").removeClass("active")
+
+        $("#card-login").removeClass("d-block")
+        $("#card-login").addClass("d-none")
+
+        $("#card-register").removeClass("d-none")
+        $("#card-register").addClass("d-block")
+      })
+      $("#form-login").submit((event) => {
+        event.preventDefault()
+        $("#email-login-msg").removeClass("d-block")
+        $("#password-login-msg").removeClass("d-block")
+        $("#result-login-msg").removeClass("d-block")
+        const email = $("#email-login").val()
+        const password = $("#password-login").val()
+        const data = { email: email, password: password }
+        $.ajax({
+          headers: {
+            "Content-Type": "application/json",
+          },
+          type: "POST",
+          url: "/login",
+          data: JSON.stringify(data),
+          dataType: "JSON",
+          success: (res) => {
+            $("#token").text(res?.token.split(" ")[2])
+          },
+          error: (res) => {
+            const obj = JSON.parse(res.responseText)
+            let arr = obj.errors
+            let success = obj?.success
+
+            if (typeof arr !== "undefined") {
+              const emailMess = arr.filter((item) => {
+                return item.param === "email"
+              })[0]
+              const passMess = arr.filter((item) => {
+                return item.param === "password"
+              })[0]
+              if (typeof emailMess !== "undefined") {
+                $("#email-login-msg").text(emailMess.msg)
+                $("#email-login-msg").addClass("d-block")
+              }
+              if (typeof passMess !== "undefined") {
+                $("#password-login-msg").text(passMess.msg)
+                $("#password-login-msg").addClass("d-block")
+              }
+            }
+            if (typeof success !== "undefined" && success === false) {
+              $("#result-login-msg").text(obj.msg)
+              $("#result-login-msg").addClass("d-block")
+            }
+          },
+        })
+      })
+
+      $("#form-register").submit((event) => {
+        event.preventDefault()
+        $("#email-register-msg").removeClass("d-block")
+        $("#password-register-msg").removeClass("d-block")
+        $("#result-register-msg").removeClass("d-block")
+        $("#success-register-msg").removeClass("d-block")
+        const email = $("#email-register").val()
+        const password = $("#password-register").val()
+        const data = { email: email, password: password }
+        $.ajax({
+          headers: {
+            "Content-Type": "application/json",
+          },
+          type: "POST",
+          url: "/signup",
+          data: JSON.stringify(data),
+          dataType: "JSON",
+          success: (res) => {
+            $("#success-register-msg").text(res.msg)
+            $("#success-register-msg").addClass("d-block")
+          },
+          error: (res) => {
+            const obj = JSON.parse(res.responseText)
+            let arr = obj.errors
+            let success = obj?.success
+
+            if (typeof arr !== "undefined") {
+              const emailMess = arr.filter((item) => {
+                return item.param === "email"
+              })[0]
+              const passMess = arr.filter((item) => {
+                return item.param === "password"
+              })[0]
+              if (typeof emailMess !== "undefined") {
+                $("#email-register-msg").text(emailMess.msg)
+                $("#email-register-msg").addClass("d-block")
+              }
+              if (typeof passMess !== "undefined") {
+                $("#password-register-msg").text(passMess.msg)
+                $("#password-register-msg").addClass("d-block")
+              }
+            }
+            if (typeof success !== "undefined" && success === false) {
+              $("#result-register-msg").text(obj.msg)
+              $("#result-register-msg").addClass("d-block")
+            }
+          },
+        })
+      })
+    })
+  </script>
+</html>

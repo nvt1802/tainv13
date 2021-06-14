@@ -7,14 +7,18 @@ const passport = require("passport")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const flash = require("connect-flash")
-
+const path = require("path")
 const port = process.env.PORT || 3333
 const { sequelize } = require("./src/config/database")
+
 require("./src/config/passport")(passport)
 require("./src/model")
 ;(async () => {
   await sequelize.sync()
 })()
+
+app.use(express.static(path.join(__dirname, "public")))
+app.set("views", path.join(__dirname, "./src/views"))
 app.use(cors())
 app.use(
   session({

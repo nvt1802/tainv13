@@ -1,35 +1,17 @@
 module.exports = (app, passport) => {
   const Model = require("../model")
-  const authRouter = require("./auth")(passport)
-  const personRouter = require("./persons")(passport)
+  const authRouter = require("./auth")()
+  const personRouter = require("./persons")()
+  require("./security")(app, passport)
 
   app.use(authRouter)
-  app.use(personRouter)
+  app.use("/persons", personRouter)
 
   app.get("/", async (req, res) => {
-    Model.Person.findAll().then((person) => {
-      res.json(person)
-    })
+    res.render("index.ejs", { msg: "HELLO WORLD" })
   })
 
-  app.get(
-    "/test",
-    passport.authenticate("jwt", { session: false }),
-    async (req, res) => {
-      res.send(req.user)
-    }
-  )
-
-  const getToken = function (headers) {
-    if (headers && headers.authorization) {
-      var parted = headers.authorization.split(" ")
-      if (parted.length === 2) {
-        return parted[1]
-      } else {
-        return null
-      }
-    } else {
-      return null
-    }
-  }
+  app.get("*", async (req, res) => {
+    res.status(404).json({ msg: "not found" })
+  })
 }
