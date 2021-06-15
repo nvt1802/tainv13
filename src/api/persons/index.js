@@ -1,12 +1,12 @@
 const personRouter = require('express').Router()
 const { body, validationResult, param } = require('express-validator')
 const { sequelize, dataTypes } = require('../../config/database')
-const Person = require('../../model/persons')(sequelize, dataTypes)
+const model = require('../../model')
 
 module.exports = () => {
   // GET
   personRouter.get('/persons', async (req, res) => {
-    Person.findAll().then((person) => {
+    model.Person.findAll().then((person) => {
       res.json(person)
     })
   })
@@ -28,7 +28,7 @@ module.exports = () => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-      Person.create({
+      model.Person.create({
         username: req.body.username,
         points: req.body.points,
       }).then((result) => {
@@ -47,7 +47,7 @@ module.exports = () => {
       .notEmpty()
       .withMessage('PersonId cannot be blank')
       .custom((value) => {
-        return Person.findOne({
+        return model.Person.findOne({
           where: {
             personId: value,
           },
@@ -72,7 +72,7 @@ module.exports = () => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-      Person.findOne({
+      model.Person.findOne({
         where: {
           personId: req.body.personId,
         },
@@ -95,7 +95,7 @@ module.exports = () => {
       .notEmpty()
       .withMessage('PersonId cannot be blank')
       .custom((value) => {
-        return Person.findOne({
+        return model.Person.findOne({
           where: {
             personId: value,
           },

@@ -1,17 +1,17 @@
-module.exports = (sequelize, dataTypes) => {
-  const Profile = sequelize.define(
-    'profile',
-    {
-      profileId: {
-        type: dataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
-      name: dataTypes.STRING,
-    },
-    { timestamps: false }
-  )
+const { sequelize, dataTypes } = require('../../config/database')
 
-  return Profile
-}
+const Profile = sequelize.define(
+  'profile',
+  {
+    profileId: {
+      type: dataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
+    },
+    name: dataTypes.STRING,
+  },
+  { timestamps: false }
+)
+
+module.exports = Profile

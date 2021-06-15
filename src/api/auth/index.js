@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt-nodejs')
 const uuid = require('uuid')
 const jwt = require('jsonwebtoken')
 const { sequelize, dataTypes } = require('../../config/database')
-const User = require('../../model/users')(sequelize, dataTypes)
+const model = require('../../model')
 
 module.exports = () => {
   authRouter.post(
@@ -35,7 +35,7 @@ module.exports = () => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-      User.create({
+      model.User.create({
         id: uuid.v4(),
         email: req.body.email,
         password: bcrypt.hashSync(
@@ -72,7 +72,7 @@ module.exports = () => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-      User.findOne({
+      model.User.findOne({
         where: {
           email: req.body.email,
         },

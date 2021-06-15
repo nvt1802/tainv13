@@ -1,31 +1,33 @@
-module.exports = (sequelize, dataTypes) => {
-  return sequelize.define('users', {
-    id: {
-      type: dataTypes.UUID,
-      field: 'id',
-      primaryKey: true,
-      defaultValue: dataTypes.UUIDV4,
+const { sequelize, dataTypes } = require('../../config/database')
+
+const Users = sequelize.define('users', {
+  id: {
+    type: dataTypes.UUID,
+    field: 'id',
+    primaryKey: true,
+    defaultValue: dataTypes.UUIDV4,
+  },
+  email: {
+    type: dataTypes.STRING,
+    validate: {
+      notEmpty: true,
     },
-    email: {
-      type: dataTypes.STRING,
-      validate: {
-        notEmpty: true,
-      },
-      field: 'email',
+    field: 'email',
+  },
+  password: {
+    type: dataTypes.STRING,
+    validate: {
+      notEmpty: true,
     },
-    password: {
-      type: dataTypes.STRING,
-      validate: {
-        notEmpty: true,
-      },
-      field: 'password',
+    field: 'password',
+  },
+  role: {
+    type: dataTypes.INTEGER,
+    allowNull: false,
+    validate: {
+      notEmpty: true,
     },
-    role: {
-      type: dataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-  })
-}
+  },
+})
+
+module.exports = Users

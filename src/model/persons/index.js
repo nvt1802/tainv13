@@ -1,21 +1,21 @@
-module.exports = (sequelize, dataTypes) => {
-  const Profile = require('../profile')(sequelize, dataTypes)
-  const Person = sequelize.define(
-    'person',
-    {
-      personId: {
-        type: dataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
-      username: dataTypes.STRING,
-      points: dataTypes.INTEGER,
+const { sequelize, dataTypes } = require('../../config/database')
+
+const Profile = require('../profile')
+const Person = sequelize.define(
+  'person',
+  {
+    personId: {
+      type: dataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
     },
-    { timestamps: false }
-  )
+    username: dataTypes.STRING,
+    points: dataTypes.INTEGER,
+  },
+  { timestamps: false }
+)
 
-  Person.belongsTo(Profile)
+Person.belongsTo(Profile)
 
-  return Person
-}
+module.exports = Person
