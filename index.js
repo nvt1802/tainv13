@@ -5,7 +5,6 @@ require('dotenv').config()
 const server = require('http').createServer(app)
 const path = require('path')
 const port = process.env.PORT || 4000
-const { sequelize } = require('./src/config/database')
 
 require('./src/model')
 

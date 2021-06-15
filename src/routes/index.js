@@ -15,15 +15,18 @@ module.exports = (app) => {
   app.use(path, personRouter)
 
   app.get('/', async (req, res) => {
+    res.render('index.ejs', { msg: 'HELLO WORLD' })
+  })
+
+  app.get('/test', async (req, res) => {
     model.Person.findAll({ include: [{ model: model.Profile }] }).then(
       (items) => {
         res.json(items)
       }
     )
-    // res.render('index.ejs', { msg: 'HELLO WORLD' })
   })
 
-  app.get("*", async (req, res) => {
-    res.status(404).json({ msg: "not found" })
+  app.get('*', async (req, res) => {
+    res.status(404).json({ msg: 'not found' })
   })
 }
