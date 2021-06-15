@@ -1,18 +1,14 @@
-const path = '/api'
+const model = require('../model')
+const authRouter = require('../api/auth')
+const users = require('../api/users')
+const personRouter = require('../api/persons')
+
 module.exports = (app) => {
   require('../middleware/authenticateAdmin')(app)
   require('../middleware/authenticateUsers')(app)
-  // const { sequelize, dataTypes } = require('../config/database')
-  const model = require('../model')
-
-  const authRouter = require('../api/auth')()
 
   app.use(authRouter)
-  const users = require('../api/users')()
-  const personRouter = require('../api/persons')()
-
-  app.use(path, users)
-  app.use(path, personRouter)
+  app.use('/api', users, personRouter)
 
   app.get('/', async (req, res) => {
     res.render('index.ejs', { msg: 'HELLO WORLD' })
