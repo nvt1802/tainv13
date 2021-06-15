@@ -1,41 +1,19 @@
-const express = require("express")
-const cors = require("cors")
+const express = require('express')
+const cors = require('cors')
 const app = express()
-require("dotenv").config()
-const server = require("http").createServer(app)
-const passport = require("passport")
-const cookieParser = require("cookie-parser")
-const session = require("express-session")
-const flash = require("connect-flash")
-const path = require("path")
-const port = process.env.PORT || 3333
-const { sequelize } = require("./src/config/database")
+require('dotenv').config()
+const server = require('http').createServer(app)
+const path = require('path')
+const port = process.env.PORT || 4000
+const { sequelize } = require('./src/config/database')
 
-require("./src/config/passport")(passport)
-require("./src/model")
-;(async () => {
-  await sequelize.sync()
-})()
+require('./src/model')
 
-app.use(express.static(path.join(__dirname, "public")))
-app.set("views", path.join(__dirname, "./src/views"))
+app.use(express.static(path.join(__dirname, 'public')))
+app.set('views', path.join(__dirname, './src/views'))
 app.use(cors())
-app.use(
-  session({
-    secret: "tainv13",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 1000 * 60 * 60,
-    },
-  })
-)
 app.use(express.json())
-app.use(cookieParser())
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(flash())
 
-require("./src/routes")(app, passport)
+require('./src/routes')(app)
 
 server.listen(port, console.log(`server runing in port ${port}`))

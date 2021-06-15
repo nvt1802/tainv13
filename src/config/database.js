@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize")
+const { Sequelize, DataTypes } = require('sequelize')
 
 module.exports = {
   sequelize: new Sequelize({
@@ -7,7 +7,7 @@ module.exports = {
     password: process.env.PASSWORD_DB,
     host: process.env.HOST_DB,
     port: process.env.PORT_DB,
-    dialect: "postgres",
+    dialect: 'postgres',
     dialectOptions: {
       ssl: {
         require: true,

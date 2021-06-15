@@ -1,8 +1,8 @@
 module.exports = (sequelize, dataTypes) => {
-  return sequelize.define("users", {
+  return sequelize.define('users', {
     id: {
       type: dataTypes.UUID,
-      field: "id",
+      field: 'id',
       primaryKey: true,
       defaultValue: dataTypes.UUIDV4,
     },
@@ -11,14 +11,21 @@ module.exports = (sequelize, dataTypes) => {
       validate: {
         notEmpty: true,
       },
-      field: "email",
+      field: 'email',
     },
     password: {
       type: dataTypes.STRING,
       validate: {
         notEmpty: true,
       },
-      field: "password",
+      field: 'password',
+    },
+    role: {
+      type: dataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
   })
 }

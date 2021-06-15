@@ -1,38 +1,40 @@
-const personRouter = require("express").Router()
-const { body, validationResult, param } = require("express-validator")
-const Model = require("../../model")
+const personRouter = require('express').Router()
+const { body, validationResult, param } = require('express-validator')
+const { sequelize, dataTypes } = require('../../config/database')
+const Person = require('../../model/persons')(sequelize, dataTypes)
 
 module.exports = () => {
   // GET
-  personRouter.get(async (req, res) => {
-    Model.Person.findAll().then((person) => {
+  personRouter.get('/persons', async (req, res) => {
+    Person.findAll().then((person) => {
       res.json(person)
     })
   })
   // POST
   personRouter.post(
-    body("username")
+    '/persons',
+    body('username')
       .notEmpty()
-      .withMessage("Username cannot be blank")
+      .withMessage('Username cannot be blank')
       .isLength({ min: 5 })
-      .withMessage("must be at least 5 chars long"),
-    body("points")
+      .withMessage('must be at least 5 chars long'),
+    body('points')
       .notEmpty()
-      .withMessage("Points cannot be blank")
+      .withMessage('Points cannot be blank')
       .isNumeric()
-      .withMessage("is numeric"),
+      .withMessage('is numeric'),
     async (req, res) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-      Model.Person.create({
+      Person.create({
         username: req.body.username,
         points: req.body.points,
       }).then((result) => {
         res.json({
           success: true,
-          msg: "Successful created new person",
+          msg: 'Successful created new person',
           person: result,
         })
       })
@@ -40,46 +42,47 @@ module.exports = () => {
   )
   // PUT
   personRouter.put(
-    body("personId")
+    '/persons',
+    body('personId')
       .notEmpty()
-      .withMessage("PersonId cannot be blank")
+      .withMessage('PersonId cannot be blank')
       .custom((value) => {
-        return Model.Person.findOne({
+        return Person.findOne({
           where: {
             personId: value,
           },
         }).then((person) => {
           if (!person) {
-            return Promise.reject("PersonId not found")
+            return Promise.reject('PersonId not found')
           }
         })
       }),
-    body("username")
+    body('username')
       .notEmpty()
-      .withMessage("Username cannot be blank")
+      .withMessage('Username cannot be blank')
       .isLength({ min: 5 })
-      .withMessage("must be at least 5 chars long"),
-    body("points")
+      .withMessage('must be at least 5 chars long'),
+    body('points')
       .notEmpty()
-      .withMessage("Points cannot be blank")
+      .withMessage('Points cannot be blank')
       .isNumeric()
-      .withMessage("is numeric"),
+      .withMessage('is numeric'),
     async (req, res) => {
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-      Model.Person.findOne({
+      Person.findOne({
         where: {
           personId: req.body.personId,
         },
       }).then((person) => {
-        person.setDataValue("username", req.body.username)
-        person.setDataValue("points", req.body.points)
+        person.setDataValue('username', req.body.username)
+        person.setDataValue('points', req.body.points)
         person.save()
         res.json({
           success: true,
-          msg: "Successful updated person",
+          msg: 'Successful updated person',
           person: person,
         })
       })
@@ -87,18 +90,18 @@ module.exports = () => {
   )
   // DELETE
   personRouter.delete(
-    "/persons/:personId",
-    param("personId")
+    '/persons/:personId',
+    param('personId')
       .notEmpty()
-      .withMessage("PersonId cannot be blank")
+      .withMessage('PersonId cannot be blank')
       .custom((value) => {
-        return Model.Person.findOne({
+        return Person.findOne({
           where: {
             personId: value,
           },
         }).then((person) => {
           if (!person) {
-            return Promise.reject("PersonId not found")
+            return Promise.reject('PersonId not found')
           }
         })
       }),
@@ -107,7 +110,7 @@ module.exports = () => {
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
       }
-      Model.Person.destroy({
+      Person.destroy({
         where: {
           personId: req.params.personId,
         },

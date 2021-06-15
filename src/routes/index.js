@@ -1,17 +1,22 @@
-module.exports = (app, passport) => {
-  const Model = require("../model")
-  const authRouter = require("./auth")()
-  const personRouter = require("./persons")()
-  require("./security")(app, passport)
+const path = '/api'
+module.exports = (app) => {
+  require('../middleware/authenticateAdmin')(app)
+  require('../middleware/authenticateUsers')(app)
+
+  const authRouter = require('../api/auth')()
 
   app.use(authRouter)
-  app.use("/persons", personRouter)
+  const users = require('../api/users')()
+  const personRouter = require('../api/persons')()
 
-  app.get("/", async (req, res) => {
-    res.render("index.ejs", { msg: "HELLO WORLD" })
+  app.use(path, users)
+  app.use(path, personRouter)
+
+  app.get('/', async (req, res) => {
+    res.render('index.ejs', { msg: 'HELLO WORLD' })
   })
 
-  app.get("*", async (req, res) => {
-    res.status(404).json({ msg: "not found" })
-  })
+  // app.get("*", async (req, res) => {
+  //   res.status(404).json({ msg: "not found" })
+  // })
 }

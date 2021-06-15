@@ -1,7 +1,7 @@
 module.exports = (sequelize, dataTypes) => {
-  const Person = require("../persons")(sequelize, dataTypes)
+  const Person = require('../persons')(sequelize, dataTypes)
   const Profile = sequelize.define(
-    "profile",
+    'profile',
     {
       profileId: {
         type: dataTypes.INTEGER,
