@@ -1,5 +1,6 @@
 module.exports = (sequelize, dataTypes) => {
-  return sequelize.define(
+  const Profile = require('../profile')(sequelize, dataTypes)
+  const Person = sequelize.define(
     'person',
     {
       personId: {
@@ -13,4 +14,8 @@ module.exports = (sequelize, dataTypes) => {
     },
     { timestamps: false }
   )
+
+  Person.belongsTo(Profile)
+
+  return Person
 }
