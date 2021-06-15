@@ -31,7 +31,6 @@ module.exports = () => {
       .isLength({ min: 8 })
       .withMessage('Password is too weak'),
     (req, res) => {
-      console.log(req.body)
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() })
