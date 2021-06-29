@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "title": "Swagger Petstore"
   },
-  "host": "https://tai1802.herokuapp.com",
+  "host": "tai1802.herokuapp.com",
   "tags": [
     {
       "name": "authenticate",
