@@ -6,6 +6,15 @@ const server = require('http').createServer(app)
 const path = require('path')
 const port = process.env.PORT || 4000
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('./src/docs/swagger.json')
+
+var options = {
+  explorer: true,
+}
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, options))
+
 require('./src/model')
 
 app.use(express.static(path.join(__dirname, 'public')))
