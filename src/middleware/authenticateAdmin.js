@@ -16,7 +16,7 @@ const authenticateToken = (req, res, next) => {
     process.env.ACCESS_TOKEN_SECRET || 'tainv13',
     (err, user) => {
       if (err) return res.status(401).json(err)
-      if (user.role !== 1) return res.sendStatus(403)
+      if (user.permissionId !== 1) return res.sendStatus(403)
       req.user = user
       next()
     }

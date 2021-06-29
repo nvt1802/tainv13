@@ -13,7 +13,7 @@ authRouter.post(
     .isEmail()
     .withMessage('Email invalidate')
     .custom((value) => {
-      return User.findOne({
+      return model.User.findOne({
         where: {
           email: value,
         },
@@ -37,14 +37,18 @@ authRouter.post(
       id: uuid.v4(),
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null),
-      role: 2,
-    }).then((newUser) => {
-      if (!newUser) {
-        res.json({ success: false, msg: 'Email already exists' })
-      } else {
-        res.json({ success: true, msg: 'Successful created new user' })
-      }
+      permissionId: 2,
     })
+      .then((newUser) => {
+        if (!newUser) {
+          res.json({ success: false, msg: 'Email already exists' })
+        } else {
+          res.json({ success: true, msg: 'Successful created new user' })
+        }
+      })
+      .catch((err) => {
+        res.json({ success: false, msg: err?.original.detail })
+      })
   }
 )
 
