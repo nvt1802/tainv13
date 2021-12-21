@@ -1,6 +1,5 @@
 const { sequelize, dataTypes } = require('../../config/database')
-
-const Permission = require('../permission')
+const Role = require('../role')
 const Users = sequelize.define('users', {
   id: {
     type: dataTypes.UUID,
@@ -24,6 +23,6 @@ const Users = sequelize.define('users', {
   },
 })
 
-Users.belongsTo(Permission)
+Users.belongsTo(Role)
 
-module.exports = Users
+module.exports = { Users }

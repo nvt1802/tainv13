@@ -1,9 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "List API",
     "version": "1.0.0",
-    "title": "Swagger Petstore"
+    "title": "Tai1802 API"
   },
   "host": "tai1802.herokuapp.com",
   "tags": [
@@ -12,23 +11,15 @@
       "description": "Login and signup"
     }
   ],
-  "schemes": [
-    "https",
-    "http"
-  ],
+  "schemes": ["https", "http"],
   "paths": {
     "/login": {
       "post": {
-        "tags": [
-          "authenticate"
-        ],
+        "tags": ["authenticate"],
         "summary": "Login",
         "description": "Login page.",
         "operationId": "Login",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
+        "produces": ["application/xml", "application/json"],
         "parameters": [
           {
             "in": "body",
@@ -41,24 +32,22 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
     },
     "/signup": {
       "post": {
-        "tags": [
-          "authenticate"
-        ],
+        "tags": ["authenticate"],
         "summary": "Sign Up",
         "description": "This can only be done by the logged in user.",
         "operationId": "createUser",
-        "produces": [
-          "application/xml",
-          "application/json"
-        ],
+        "produces": ["application/xml", "application/json"],
         "parameters": [
           {
             "in": "body",
@@ -71,8 +60,11 @@
           }
         ],
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }

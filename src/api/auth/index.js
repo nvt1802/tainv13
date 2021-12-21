@@ -37,7 +37,7 @@ authRouter.post(
       id: uuid.v4(),
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null),
-      permissionId: 2,
+      roleId: 2,
     })
       .then((newUser) => {
         if (!newUser) {
@@ -90,7 +90,7 @@ authRouter.post(
                 users.dataValues,
                 process.env.ACCESS_TOKEN_SECRET || 'tainv13',
                 {
-                  expiresIn: '3h',
+                  expiresIn: '30d',
                 }
               )
               res.json({ success: true, token: 'Bearer ' + token })

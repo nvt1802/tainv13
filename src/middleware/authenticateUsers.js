@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const paths = ['/api/persons']
+const paths = ['/api/persons', '/api/exams', '/api/questions']
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']

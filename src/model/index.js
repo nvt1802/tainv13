@@ -1,16 +1,18 @@
 const { sequelize } = require('../config/database')
 const Users = require('./users')
-const Person = require('./persons')
-const Profile = require('./profile')
-const Permission = require('./permission')
+const Role = require('./role')
+const Exams = require('./exams')
+const Questions = require('./questions')
+const Batches = require('./batches')
 
 ;(async () => {
   await sequelize.sync()
 })()
 
 module.exports = {
-  User: Users,
-  Person: Person,
-  Profile: Profile,
-  Permission: Permission,
+  User: Users.Users,
+  Role: Role,
+  Exams: Exams,
+  Questions: Questions,
+  Batches: Batches,
 }
